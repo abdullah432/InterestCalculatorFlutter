@@ -36,7 +36,7 @@ class _SIFormState extends State<SIForm> {
 
   @override
   Widget build(BuildContext context) {
-    textStyle = Theme.of(context).textTheme.subtitle;
+    textStyle = Theme.of(context).textTheme.title;
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -45,128 +45,141 @@ class _SIFormState extends State<SIForm> {
       body: Form(
           key: _formKey,
           child: Padding(
-        padding: EdgeInsets.all(minimumPadding * 2),
-        child: ListView(
-          children: <Widget>[
-            getImageAsset(),
-            Padding(
-                padding: EdgeInsets.only(
-                    top: minimumPadding, bottom: minimumPadding),
-                child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    style: textStyle,
-                    controller: principleController,
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return 'Please Enter Principle amount';
-                      }
-                      return value;
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Principle',
-                      hintText: 'Enter Principle e.g 12000',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0)),
-                    ))),
-            Padding(
-                padding: EdgeInsets.only(
-                    top: minimumPadding, bottom: minimumPadding),
-                child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    style: textStyle,
-                    controller: roiController,
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return 'Please Enter Rate of interest amount';
-                      }
-                      return value;
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Rate of interest',
-                      hintText: 'In percentage',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0)),
-                    ))),
-            Padding(
-                padding: EdgeInsets.only(
-                    top: minimumPadding, bottom: minimumPadding),
-                child: Row(
+            padding: EdgeInsets.all(minimumPadding * 2),
+            child: ListView(
+              children: <Widget>[
+                getImageAsset(),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: minimumPadding, bottom: minimumPadding),
+                    child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        style: textStyle,
+                        controller: principleController,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please Enter Principle amount';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Principle',
+                          hintText: 'Enter Principle e.g 12000',
+                          errorStyle:
+                              TextStyle(color: Colors.yellow, fontSize: 15.0),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0)),
+                        ))),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: minimumPadding, bottom: minimumPadding),
+                    child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        style: textStyle,
+                        controller: roiController,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please Enter Rate of interest amount';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Rate of interest',
+                          hintText: 'In percentage',
+                          errorStyle:
+                              TextStyle(color: Colors.yellow, fontSize: 15.0),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0)),
+                        ))),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: minimumPadding, bottom: minimumPadding),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                            child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                style: textStyle,
+                                controller: termController,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please Enter Time';
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  labelText: 'Term',
+                                  hintText: 'Time in year',
+                                  errorStyle: TextStyle(
+                                      color: Colors.yellowAccent,
+                                      fontSize: 12.0),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5.0)),
+                                ))),
+                        Container(
+                          margin: EdgeInsets.all(minimumPadding * 5),
+                        ),
+                        Expanded(
+                            child: DropdownButton<String>(
+                          items: currencies.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          style: textStyle,
+                          value: currentItemSelected,
+                          onChanged: (String newValueSelected) {
+                            onDropDownItemSelected(newValueSelected);
+                          },
+                        )),
+                      ],
+                    )),
+                Row(
                   children: <Widget>[
                     Expanded(
-                        child: TextField(
-                            keyboardType: TextInputType.number,
-                            style: textStyle,
-                            controller: termController,
-                            decoration: InputDecoration(
-                              labelText: 'Term',
-                              hintText: 'Time in year',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5.0)),
+                        child: Padding(
+                            padding: EdgeInsets.only(
+                                top: minimumPadding, bottom: minimumPadding),
+                            child: RaisedButton(
+                              color: Theme.of(context).accentColor,
+                              textColor: Theme.of(context).primaryColorDark,
+                              child: Text("CALCULATE"),
+                              onPressed: () {
+                                setState(() {
+                                  if (_formKey.currentState.validate()) {
+                                    this.displayResult = calculateTotalReturn();
+                                  }
+                                });
+                              },
                             ))),
-                    Container(
-                      margin: EdgeInsets.all(minimumPadding * 5),
-                    ),
                     Expanded(
-                        child: DropdownButton<String>(
-                      items: currencies.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      style: textStyle,
-                      value: currentItemSelected,
-                      onChanged: (String newValueSelected) {
-                        onDropDownItemSelected(newValueSelected);
-                      },
-                    )),
+                        child: Padding(
+                            padding: EdgeInsets.only(
+                                top: minimumPadding, bottom: minimumPadding),
+                            child: RaisedButton(
+                              color: Theme.of(context).primaryColorDark,
+                              textColor: Theme.of(context).primaryColorLight,
+                              child: Text("RESET"),
+                              onPressed: () {
+                                setState(() {
+                                  resetData();
+                                });
+                              },
+                            ))),
                   ],
-                )),
-            Row(
-              children: <Widget>[
-                Expanded(
-                    child: Padding(
-                        padding: EdgeInsets.only(
-                            top: minimumPadding, bottom: minimumPadding),
-                        child: RaisedButton(
-                          color: Theme.of(context).accentColor,
-                          textColor: Theme.of(context).primaryColorDark,
-                          child: Text("CALCULATE"),
-                          onPressed: () {
-                            setState(() {
-                              if (_formKey.currentState.validate()) {
-                                this.displayResult = calculateTotalReturn();
-                              }
-                            });
-                          },
-                        ))),
-                Expanded(
-                    child: Padding(
-                        padding: EdgeInsets.only(
-                            top: minimumPadding, bottom: minimumPadding),
-                        child: RaisedButton(
-                          color: Theme.of(context).primaryColorDark,
-                          textColor: Theme.of(context).primaryColorLight,
-                          child: Text("RESET"),
-                          onPressed: () {
-                            setState(() {
-                              resetData();
-                            });
-                          },
-                        ))),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: minimumPadding, bottom: minimumPadding),
+                  child: Text(
+                    this.displayResult,
+                    style: textStyle,
+                  ),
+                ),
               ],
             ),
-            Padding(
-              padding:
-                  EdgeInsets.only(top: minimumPadding, bottom: minimumPadding),
-              child: Text(
-                this.displayResult,
-                style: textStyle,
-              ),
-            ),
-          ],
-        ),
-      )),
+          )),
     );
   }
 
@@ -187,7 +200,7 @@ class _SIFormState extends State<SIForm> {
     double roi = double.parse(roiController.text);
     double term = double.parse(termController.text);
 
-    double totalAmountPayable = principle * (principle * roi * term) / 100;
+    double totalAmountPayable = principle + (principle * roi * term) / 100;
     String result =
         'After $term years, your investment will be worth $totalAmountPayable';
     return result;
