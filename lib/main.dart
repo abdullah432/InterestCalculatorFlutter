@@ -7,6 +7,7 @@ void main() {
       title: "Interest Calculator",
       home: SIForm(),
       theme: ThemeData(
+        brightness: Brightness.dark,
         primaryColor: Colors.indigo,
         accentColor: Colors.indigoAccent,
         ),
@@ -23,11 +24,15 @@ class SIForm extends StatefulWidget {
 class _SIFormState extends State<SIForm> {
   final minimumPadding = 5.0;
   var currencies = ['Rupees', 'dollar'];
+  TextStyle textStyle;
   @override
   Widget build(BuildContext context) {
+    textStyle = Theme.of(context).textTheme.subtitle;
     return Scaffold(
       // resizeToAvoidBottomInset: false,
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("Interest Calculator"),
+      ),
       body: Container(
           margin: EdgeInsets.all(minimumPadding * 2),
           child: ListView(
@@ -38,6 +43,7 @@ class _SIFormState extends State<SIForm> {
                       top: minimumPadding, bottom: minimumPadding),
                   child: TextField(
                       keyboardType: TextInputType.number,
+                      style: textStyle,
                       decoration: InputDecoration(
                         labelText: 'Principle',
                         hintText: 'Enter Principle e.g 12000',
@@ -49,6 +55,7 @@ class _SIFormState extends State<SIForm> {
                       top: minimumPadding, bottom: minimumPadding),
                   child: TextField(
                       keyboardType: TextInputType.number,
+                      style: textStyle,
                       decoration: InputDecoration(
                         labelText: 'Rate of interest',
                         hintText: 'In percentage',
@@ -63,6 +70,7 @@ class _SIFormState extends State<SIForm> {
                       Expanded(
                           child: TextField(
                               keyboardType: TextInputType.number,
+                              style: textStyle,
                               decoration: InputDecoration(
                                 labelText: 'Term',
                                 hintText: 'Time in year',
@@ -80,6 +88,7 @@ class _SIFormState extends State<SIForm> {
                             child: Text(value),
                           );
                         }).toList(),
+                        style: textStyle,
                         value: 'Rupees',
                         onChanged: (String newValueSelected) {
                           // value = newValueSelected;
@@ -94,6 +103,8 @@ class _SIFormState extends State<SIForm> {
                           padding: EdgeInsets.only(
                               top: minimumPadding, bottom: minimumPadding),
                           child: RaisedButton(
+                            color: Theme.of(context).accentColor,
+                            textColor: Theme.of(context).primaryColorDark,
                             child: Text("CALCULATE"),
                             onPressed: () {},
                           ))),
@@ -102,6 +113,8 @@ class _SIFormState extends State<SIForm> {
                           padding: EdgeInsets.only(
                               top: minimumPadding, bottom: minimumPadding),
                           child: RaisedButton(
+                            color: Theme.of(context).primaryColorDark,
+                            textColor: Theme.of(context).primaryColorLight,
                             child: Text("RESET"),
                             onPressed: () {},
                           ))),
@@ -110,7 +123,7 @@ class _SIFormState extends State<SIForm> {
               Padding(
                 padding: EdgeInsets.only(
                     top: minimumPadding, bottom: minimumPadding),
-                child: Text('Dumy Data'),
+                child: Text('Dumy Data', style: textStyle,),
               ),
             ],
           )),
